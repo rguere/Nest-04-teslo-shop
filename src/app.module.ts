@@ -2,6 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './products/products.module';
+import { CommonModule } from './common/common.module';
+import { Product } from './products/entities/product.entity';
+import { ProductImage } from './products/entities/product-image.entity';
+import { SeedModule } from './seed/seed.module';
 
 
 @Module({
@@ -16,10 +20,15 @@ import { ProductsModule } from './products/products.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
+      entities: [Product, ProductImage],
       synchronize: true, //normalmente se usa en false cuando se esta enb produccion
     }),
 
-    ProductsModule
+    ProductsModule,
+
+    CommonModule,
+
+    SeedModule,
   ],
 })
 export class AppModule {}

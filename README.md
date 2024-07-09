@@ -17,9 +17,15 @@
 docker-compose up -d 
 ```
 
+5. instalar las dependencias de para el ORM
 
-6. Ejecicion  en ambiete de desarrollo
+6. Ejecucion  en ambiete de desarrollo
 ```
 yarn start:dev
+
+```
+7. endpoint Generar data semilla
+```
+https://localhost:3000/api/seed
 
 ```
