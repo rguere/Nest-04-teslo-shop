@@ -6,6 +6,7 @@ import { CommonModule } from './common/common.module';
 import { Product } from './products/entities/product.entity';
 import { ProductImage } from './products/entities/product-image.entity';
 import { SeedModule } from './seed/seed.module';
+import { FilesModule } from './files/files.module';
 
 
 @Module({
@@ -29,6 +30,8 @@ import { SeedModule } from './seed/seed.module';
     CommonModule,
 
     SeedModule,
+
+    FilesModule,
   ],
 })
 export class AppModule {}
