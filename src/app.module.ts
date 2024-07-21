@@ -1,6 +1,10 @@
+import { join } from 'path';
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
 import { ProductsModule } from './products/products.module';
 import { CommonModule } from './common/common.module';
 import { Product } from './products/entities/product.entity';
@@ -24,6 +28,9 @@ import { FilesModule } from './files/files.module';
       entities: [Product, ProductImage],
       synchronize: true, //normalmente se usa en false cuando se esta enb produccion
     }),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname,'..','public'), }),
 
     ProductsModule,
 
