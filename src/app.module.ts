@@ -11,6 +11,7 @@ import { Product } from './products/entities/product.entity';
 import { ProductImage } from './products/entities/product-image.entity';
 import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -39,6 +40,8 @@ import { FilesModule } from './files/files.module';
     SeedModule,
 
     FilesModule,
+
+    AuthModule,
   ],
 })
 export class AppModule {}
