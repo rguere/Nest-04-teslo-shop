@@ -13,7 +13,6 @@ import { SeedModule } from './seed/seed.module';
 import { FilesModule } from './files/files.module';
 import { AuthModule } from './auth/auth.module';
 
-
 @Module({
   imports: [ 
     ConfigModule.forRoot(),
@@ -21,13 +20,13 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
+      port: parseInt(process.env.DB_PORT,10) || 5432,
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       entities: [Product, ProductImage],
-      synchronize: true, //normalmente se usa en false cuando se esta enb produccion
+      synchronize: true, //normalmente se usa en false cuando se esta en produccion
     }),
 
     ServeStaticModule.forRoot({
