@@ -1,11 +1,12 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert,BeforeUpdate, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({ type: 'varchar', unique: true, length: 255 })
+    @Column({ type: 'varchar', unique: true, length: 255,
+     })
     email: string;
 
     @Column({ type: 'varchar', length: 255, select:false})
@@ -20,4 +21,16 @@ export class User {
     @Column('text',{ array: true, default: ['user'] })
     roles: string[];
 
+    @BeforeInsert()
+    checkFieldsBeforeInsert()
+    {
+        this.email = this.email.toLocaleLowerCase().trim();
+        
+    }
+
+    @BeforeUpdate()
+    checkFieldsBeforeUpdate()
+    {
+        this.email = this.email.toLocaleLowerCase().trim();        
+    }
 }

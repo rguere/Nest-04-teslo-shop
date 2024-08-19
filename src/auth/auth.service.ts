@@ -1,17 +1,26 @@
+
+
 import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
+
 import * as bcrypt from 'bcrypt';
-import { AuthController } from './auth.controller';
-import { LoginUserDto,CreateUserDto } from './dto';
+
+import { User } from './entities/user.entity';
+import { LoginUserDto, CreateUserDto } from './dto';
+import { JwtPayload } from './interfaces/jwt.payload.interface';
+
+//import { AuthController } from './auth.controller';
+
 
 @Injectable()
 export class AuthService {
 
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ){}
   
 
@@ -29,15 +38,17 @@ export class AuthService {
       throw new UnauthorizedException('Not valid credentials (email)');
     }
     
-    if(!bcrypt.compareSync( password, user.password))
+    if(!bcrypt.compareSync( password, user.password) )
       throw new UnauthorizedException('Not valid Credentials (password)');
 
-    return user;
-    //TODO: retornnar el JWT
+    return{
+      ...user,
+      token: this.getJwtToken({ email: user.email })
+    };
+
   }
+
  //#endregion
-
-
 
   //#region  Crear usuario
   async create(createUserDto: CreateUserDto) {
@@ -50,8 +61,11 @@ export class AuthService {
 
       await this.userRepository.save(user);
       delete user.password;
-      return user;
-      //TODO: Retornar el JWT de acceso
+
+      return{
+        ...user,
+        token: this.getJwtToken({ email: user.email })
+      };
     }
     catch( error )
     {
@@ -61,8 +75,17 @@ export class AuthService {
   }
   //#endregion
 
-//#region Private functions
+//#region Private functions --------------------------
 
+//#region getJwtToken
+private getJwtToken( payload: JwtPayload )
+{
+  const token = this.jwtService.sign(payload);
+  return token;
+}
+//#endregion
+
+ //#region handleDBError
 private handleDBError( error: any): never {   //este metodo no regeresa un valor cuando se usa : never
   if( error.code === '23505')
   {
@@ -72,5 +95,7 @@ private handleDBError( error: any): never {   //este metodo no regeresa un valor
   throw new InternalServerErrorException('Por favor revise el server log');
 }
 //#endregion
+
+//#endregion ------------------------------
 
 }
