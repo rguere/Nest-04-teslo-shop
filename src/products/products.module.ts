@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 //lo puedes hacer asi por el archivo de barril index.ts
 import { Product , ProductImage} from './entities';
+import { AuthModule } from './../auth/auth.module';
 
 
 @Module({
@@ -12,6 +13,7 @@ import { Product , ProductImage} from './entities';
   providers: [ProductsService],
   imports:[
     TypeOrmModule.forFeature([ Product, ProductImage]),
+    AuthModule
   ],
   exports:[
     ProductsService,

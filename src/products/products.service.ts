@@ -4,10 +4,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { validate as isUUID } from 'uuid';
 
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { PaginationDto } from '../common/dtos/pagination.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product, ProductImage } from './entities';
+import { User } from '../auth/entities/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -27,13 +28,14 @@ constructor(
 //#endregion
 
 //#region create
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try{
       const { images = [], ...productDetails } = createProductDto; //...rest es decir el rest de las propeidades
 
       const product =  this.productRepository.create({
         ...productDetails,  //... obtener todas las propiedad se llama propiedad xpress
-        images: images.map( image => this.productImageRepository.create({ url: image }) )
+        images: images.map( image => this.productImageRepository.create({ url: image }) ),
+        user,
       });
 
       await this.productRepository.save( product );
@@ -122,7 +124,7 @@ constructor(
 //#endregion
 
 //#region  update
-  async update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto, user: User) {
 
     const { images, ...toUpdate} = updateProductDto;
 
@@ -141,7 +143,7 @@ constructor(
           image => this.productImageRepository.create({ url: image })
         )
       }
-
+      product.user = user; //el usuario quien esta realizando la actualizacion
       await queryRunner.manager.save( product );
       await queryRunner.commitTransaction();
       await queryRunner.release()

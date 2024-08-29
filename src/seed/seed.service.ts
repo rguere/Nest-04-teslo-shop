@@ -19,9 +19,11 @@ export class SeedService {
     await this.producstService.deleteAllProduct();
     const products = initialData.products;
     const insertPromise = [];
-    products.forEach( product => {
-      insertPromise.push( this.producstService.create( product ) );
-    })
+    
+   // products.forEach( product => {
+   //   insertPromise.push( this.producstService.create( product) );
+   // })
+
     await Promise.all( insertPromise );
     return true;
    }
