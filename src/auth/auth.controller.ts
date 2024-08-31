@@ -23,6 +23,15 @@ export class AuthController {
     return this.authService.login( loginUserDto );
   }  
 
+  
+//#region checkAuthStatus
+@Get('check-status')
+@Auth()
+checkAuthStatus( @GetUser() user: User )
+{
+  return this.authService.checkAuthStatus( user );
+}
+//#endregion
 
 //#region  private
   @Get('private')

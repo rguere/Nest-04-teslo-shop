@@ -47,8 +47,21 @@ export class AuthService {
     };
 
   }
-
  //#endregion
+
+ //#region  checkAuthStatus
+ async checkAuthStatus(user: User)
+ {
+
+    return{
+      ...user,
+      token: this.getJwtToken({ id: user.id })
+    };
+
+ }
+ //#endregion 
+
+
 
   //#region  Crear usuario
   async create(createUserDto: CreateUserDto) {
