@@ -176,7 +176,7 @@ constructor(
 //#endregion
 
 //#region  Remove all products -- funcion usada en desarrollo cuaNDO SE UTILIZA LAS SEMILLAS
-async deleteAllProduct(){
+async deleteAllProducts(){
   const query = this.productRepository.createQueryBuilder('product');
   try{
     return await query
